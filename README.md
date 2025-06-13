@@ -40,9 +40,9 @@ PCVR
 
 プレファブの取付方法: モデルのルートに配置して実行する。調整不要です。
 
-[日本語版exe版をダウンロード](https://github.com/zgraPTR/SlashcoSense-VRC-CS-Jpn/releases/download/exe/SlashcoSense-VRC-CS-Jpn.zip)
+[日本語版exe版をダウンロード](https://github.com/zgraPTR/SlashcoSense-VRC-CS-Jpn/releases/download/SlashcoSense-VRC-CS-Jpn.zip)
 
-[日本語版MAプレハブをダウンロード](https://github.com/zgraPTR/SlashcoSense-VRC-CS-Jpn/releases/download/exe/SlashcoSense-Jpn.unitypackage)
+[日本語版MAプレハブをダウンロード](https://github.com/zgraPTR/SlashcoSense-VRC-CS-Jpn/releases/download/SlashcoSense_Jpn.unitypackage)
 
 OSC送信パラメータ
 ```
