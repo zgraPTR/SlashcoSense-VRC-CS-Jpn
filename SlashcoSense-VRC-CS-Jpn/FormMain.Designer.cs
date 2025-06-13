@@ -218,6 +218,7 @@
             0,
             0,
             0});
+            this.numericUpDownPort.ValueChanged += new System.EventHandler(this.NumericUpDownPort_ValueChanged);
             // 
             // checkBoxOSC
             // 

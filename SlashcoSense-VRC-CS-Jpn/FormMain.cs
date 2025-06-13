@@ -69,6 +69,16 @@ namespace SlashcoSense_VRC_CS_Jpn
         }
 
         /// <summary>
+        /// Port番号変更イベント
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void NumericUpDownPort_ValueChanged(object sender, EventArgs e)
+        {
+            oscTransmitter.Port = (int)numericUpDownPort.Value;     // ポート取得
+        }
+
+        /// <summary>
         /// ログ監視イベント開始
         /// </summary>
         private void InitFileSystemWatcher()
@@ -88,5 +98,6 @@ namespace SlashcoSense_VRC_CS_Jpn
             fileSystemWatcherLog.Changed += logWatcher.OnChanged;   // ファイル生成時のイベントハンドラ   
             fileSystemWatcherLog.EnableRaisingEvents = true;        // ログ監視イベント有効化
         }
+
     }
 }
