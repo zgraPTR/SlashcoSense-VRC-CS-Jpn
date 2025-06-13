@@ -62,7 +62,7 @@
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(10, 10);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(470, 190);
+            this.groupBox1.Size = new System.Drawing.Size(340, 190);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "ゲーム情報";
@@ -98,7 +98,7 @@
             this.groupBoxG.Controls.Add(this.labelG1Fuel);
             this.groupBoxG.Location = new System.Drawing.Point(10, 80);
             this.groupBoxG.Name = "groupBoxG";
-            this.groupBoxG.Size = new System.Drawing.Size(450, 100);
+            this.groupBoxG.Size = new System.Drawing.Size(320, 100);
             this.groupBoxG.TabIndex = 2;
             this.groupBoxG.TabStop = false;
             this.groupBoxG.Text = "ジェネレーター";
@@ -192,7 +192,7 @@
             this.groupBoxOSC.Controls.Add(this.label5);
             this.groupBoxOSC.Location = new System.Drawing.Point(12, 200);
             this.groupBoxOSC.Name = "groupBoxOSC";
-            this.groupBoxOSC.Size = new System.Drawing.Size(470, 50);
+            this.groupBoxOSC.Size = new System.Drawing.Size(340, 50);
             this.groupBoxOSC.TabIndex = 2;
             this.groupBoxOSC.TabStop = false;
             this.groupBoxOSC.Text = "OSC";
@@ -250,12 +250,13 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(484, 261);
+            this.ClientSize = new System.Drawing.Size(354, 261);
             this.Controls.Add(this.groupBoxOSC);
             this.Controls.Add(this.groupBox1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "FormMain";
             this.ShowIcon = false;
-            this.Text = "SlashcoSense-VRC-CS-Jpn";
+            this.Text = "SlashcoSense-VRC-CS-Jpn By:arcxingye & Raru37m";
             this.Load += new System.EventHandler(this.FormMain_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
