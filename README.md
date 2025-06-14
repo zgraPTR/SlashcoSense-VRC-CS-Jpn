@@ -4,6 +4,7 @@
 [![OSC Protocol](https://img.shields.io/badge/OSC-Rug.OSC-brightgreen)](https://www.nuget.org/packages/Rug.Osc)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+[SlashcoSense-VRC-CS-Jpn ダウンロードリンク](https://github.com/zgraPTR/SlashcoSense-VRC-CS-Jpn/releases/tag/v1.0.1)
 
 [SlashcoSense-VRC](https://github.com/arcxingye/SlashcoSense-VRC) を元に作成されています。
 
