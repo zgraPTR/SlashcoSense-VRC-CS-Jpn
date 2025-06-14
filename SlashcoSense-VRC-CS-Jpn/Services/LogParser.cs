@@ -1,5 +1,7 @@
 ﻿using SlashcoSense_VRC_CS_Jpn.Utils;
+using System;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
 namespace SlashcoSense_VRC_CS_Jpn
 {
@@ -19,97 +21,95 @@ namespace SlashcoSense_VRC_CS_Jpn
         /// <param name="line">ログの1行の内容</param>
         public void ParseLog(string line)
         {
+            int fuelNum = 0;           // 投入済燃料数
+
             if (gameData.InGame == false)
-            {               // ゲーム外フラグ
-                if (TryParseFuelReduction(line) == true)
-                {           // 調節された燃料数抽出
+            {                       // ゲーム中フラグ無効
+                if (ParseFuelReduction(line) == true)
+                {                   // 調節された燃料数抽出 成功
                     return;
                 }
-                if (TryParseMapName(line) == true)
-                {           // マップ名抽出
-                    gameData.InGame = true;             // ゲーム中フラグ
+                else if (line.EndsWith(LogUtils.GameStartStr) == true)
+                {                   // ゲーム中フラグ有効化
+                    gameData.InGame = true;                     // ゲーム中フラグ
+
+                    for (int genNum = 1; genNum <= GameUtils.GenNum; genNum++)
+                    {                                           // 全ジェネ
+                        fuelNum = gameData.Generators[genNum - 1].FilledFuel;      // 投入済燃料数
+                        Console.WriteLine($"ジェネレーター{genNum}: 投入済燃料数 {fuelNum}"); // デバッグ出力
+                        osc.SendFuelNum(genNum, fuelNum);          // 投入済燃料数送信
+                        osc.SendBatteryStatus(genNum, false);   // バッテリー未投入状態送信
+                    }
+
+                    gameEvent.RaiseGameStateUpdated();          // ゲーム情報更新イベント
+
                     return;
                 }
             }
 
             if (line.EndsWith(LogUtils.GameEndStr) == true)
-            {               // ゲーム終了フラグ有効化
+            {                       // ゲーム中フラグ無効化
                 gameData.Reset();   // ゲーム情報リセット
-                gameEvent.RaiseGameStateUpdated();      // ゲーム情報更新イベント
+                gameEvent.RaiseGameStateUpdated();              // ゲーム情報更新イベント
                 return;
             }
 
-            if (TryParseSlasherName(line) == true)
-            {               // スラッシャー名抽出
+            if (ParseSlasherName(line) == true)
+            {                       // スラッシャー名抽出 成功
                 return;
             }
-            TryParseGeneratorStatus(line);      // ジェネ更新抽出
+            else if (ParseGeneratorUpdate(line) == true)
+            {                        // ジェネ更新状態抽出 (GM以外)
+                return;
+            }
+            else if (ParseGeneratorUpdateGM(line) == true)
+            {                        // ジェネ更新状態抽出 (GM)
+                return;
+            }
         }
 
         /// <summary>
         /// 調節された燃料数抽出
         /// </summary>
         /// <param name="line">ログ内容</param>
-        /// <returns></returns>
-        private bool TryParseFuelReduction(string line)
+        /// <returns>抽出成功</returns>
+        private bool ParseFuelReduction(string line)
         {
-            Match match = LogUtils.FuelReductionRegex.Match(line);
-            // 調節された燃料数抽出
+            int filledFuel = 0;             // 調節された燃料数
+            int genNum = 0;                // ジェネ番号
+
+            Match match = LogUtils.FuelReductionRegex.Match(line);          // 調節された燃料数抽出
+
             if (match.Success == false)
-            {       // 調節された燃料抽出失敗
+            {                               // 調節された燃料抽出失敗
                 return false;
             }
 
-            int filledFuel = int.Parse(match.Groups[1].Value);              // 燃料数
-            int genNum = int.Parse(match.Groups[2].Value);                  // ジェネ番号
-            gameData.Generators[genNum - 1].FilledFuel += filledFuel;       // 燃料数格納
+            GetNumber("調節済燃料数 PFR", match.Groups[1].Value, out filledFuel);    // 燃料数取得
+            GetNumber("ジェネ番号 PFR", match.Groups[2].Value, out genNum);          // ジェネ番号取得
 
-            return true;
-        }
+            gameData.Generators[genNum - 1].FilledFuel += filledFuel;   // 燃料数格納
 
-        /// <summary>
-        /// マップID抽出
-        /// </summary>
-        /// <param name="line">ログ内容</param>
-        /// <returns></returns>
-        private bool TryParseMapName(string line)
-        {
-            Match match = LogUtils.MapNameRegex.Match(line);
-            if (match.Success == false)
-            {           // 抽出失敗
-                return false;
-            }
-
-            int mapId = int.Parse(match.Groups[1].Value);
-            gameData.MapName = LogUtils.MapNames[mapId];
-
-            for (int genNum = 1; genNum <= GameUtils.GenNum; genNum++)
-            {           // 全ジェネ
-                int fuel = gameData.Generators[genNum - 1].FilledFuel;      // 投入済燃料数
-                osc.SendFuelNum(genNum, fuel);          // 投入済燃料数送信
-                osc.SendBatteryStatus(genNum, false);   // バッテリー未投入状態送信
-            }
-
-            gameEvent.RaiseGameStateUpdated();          // ジェネ更新抽出  
-
-            return true;
+            return true;                    // 抽出内容検知
         }
 
         /// <summary>
         /// スラッシャー名抽出
         /// </summary>
         /// <param name="line">ログ内容</param>
-        /// <returns></returns>
-        private bool TryParseSlasherName(string line)
+        /// <returns>抽出成功</returns>
+        private bool ParseSlasherName(string line)
         {
-            Match match = LogUtils.GeneratorUpdateRegex.Match(line);
+            Match match = LogUtils.SlasherRegex.Match(line);    // スラッシャー名抽出
+
             if (match.Success == false)
-            {           // スラッシャー名抽出失敗
+            {                                           // スラッシャー名抽出失敗
                 return false;
             }
 
             gameData.SlasherName = match.Groups[1].Value;       // スラッシャー名格納
             osc.SendSlasherID();                        // スラッシャーID送信
+
             gameEvent.RaiseGameStateUpdated();          // ゲーム情報更新イベント
 
             return true;
@@ -119,32 +119,125 @@ namespace SlashcoSense_VRC_CS_Jpn
         /// ジュネ更新種類抽出
         /// </summary>
         /// <param name="line">ログ内容</param>
-        private void TryParseGeneratorStatus(string line)
+        /// <returns>抽出成功</returns>
+        private bool ParseGeneratorUpdate(string line)
         {
-            int genNum = 0;             // ジェネID
-            int filledFuel = 0;         // 燃料数
+            int genNum = 0;                     // ジェネID
+            string typeStr = string.Empty;      // ジェネ状態更新種類
+            string statusStr = string.Empty;    // ジェネ状態更新内容
+            bool hadBattery = false;            // ジェネ状態更新内容
 
-            Match fuelMatch = LogUtils.FueledRegex.Match(line);     // 燃料投入抽出
-            Match batteryMatch = LogUtils.batteryRegex.Match(line); // バッテリー投入抽出 
+            LogUtils.GeneratorStatus generatorStatus;  // ジェネ状態更新種類
 
-            if (fuelMatch.Success == true)
-            {           // 燃料投入抽出失敗
-                genNum = int.Parse(fuelMatch.Groups[1].Value);
-                filledFuel = (++gameData.Generators[genNum - 1].FilledFuel);
-                osc.SendFuelNum(genNum, filledFuel);                // 燃料数送信
+            Match match = LogUtils.GeneratorRegex.Match(line);     // ジェネ状態更新抽出
+
+            if (match.Success == false)
+            {                       // ジェネ状態更新抽出 失敗
+                return false;
             }
-            else if (batteryMatch.Success == true)
-            {           // バッテリー投入抽出失敗
-                genNum = int.Parse(batteryMatch.Groups[1].Value);   // ジェネ番号
-                gameData.Generators[genNum - 1].HasBattery = true;  // バッテリー投入
-                osc.SendBatteryStatus(genNum, true);                // バッテリー投入送信
+
+            typeStr = match.Groups[2].Value;                       // ジェネ状態更新種類
+            statusStr = match.Groups[3].Value;                     // ジェネ状態更新内容 (バッテリー投入状態 or 燃料数)
+
+            GetNumber("ジェネ番号 PGU", match.Groups[1].Value, out genNum); // ジェネ番号取得
+
+            if (Enum.TryParse(typeStr, true, out generatorStatus) == false)
+            {                       // ジェネ状態更新種類 取得失敗
+                ShowParseError("ジェネ状態更新種類 PGU", typeStr, "Enum 取得失敗");
+                return true;
+            }
+
+            if (generatorStatus == LogUtils.GeneratorStatus.HAS_BATTERY)
+            {                                                   // バッテリー投入
+                hadBattery = bool.Parse(statusStr);                         // バッテリー投入状態
+                gameData.Generators[genNum - 1].HasBattery = hadBattery;    // バッテリー状態格納
+
+                osc.SendBatteryStatus(genNum, hadBattery);                  // バッテリー状態送信
+            }
+            else if (generatorStatus == LogUtils.GeneratorStatus.REMAINING)
+            {                                                   // 燃料投入
+                GetNumber("必要燃料数 PGU", statusStr, out int fuelCnt);     // 必要燃料数取得
+                fuelCnt = (GameUtils.TotalFuel - fuelCnt);                  // 投入済燃料数
+                gameData.Generators[genNum - 1].FilledFuel = fuelCnt;       // 燃料数格納
+
+                osc.SendFuelNum(genNum, fuelCnt);               // 必要燃料数送信
             }
             else
-            {
-                return;
+            {                                                   // ジェネ状態更新種類 分岐未存在
+                ShowParseError("ジェネ状態更新種類 PGU", typeStr, "ジェネ状態状態 分岐無し");  // ジェネ状態更新種類 エラー表示
             }
 
-            gameEvent.RaiseGameStateUpdated();                      // ゲーム情報更新イベント
+            gameEvent.RaiseGameStateUpdated();                  // ゲーム情報更新イベント
+
+            return true;
         }
+
+
+        /// <summary>
+        /// ジュネ更新種類抽出
+        /// </summary>
+        /// <param name="line">ログ内容</param>
+        private bool ParseGeneratorUpdateGM(string line)
+        {
+            int genNum = 0;             // ジェネID
+            int fuelCnt = 0;            // 投入済燃料数
+
+            Match batteryMatch = LogUtils.HadBatteryRegex.Match(line); // バッテリー投入抽出
+            Match fuelMatch = LogUtils.GasFueledRegex.Match(line);     // 燃料投入抽出
+
+
+            if (batteryMatch.Success == true)
+            {                                                           // バッテリー投入 抽出成功
+                GetNumber("ジェネ番号 PGUGM Battery", batteryMatch.Groups[1].Value, out genNum); // ジェネ番号取得
+                gameData.Generators[genNum - 1].HasBattery = true;      // バッテリー状態格納
+
+                osc.SendBatteryStatus(genNum, true);                    // バッテリー状態送信
+            }
+            else if (fuelMatch.Success == true)
+            {                                                           // 燃料投入 抽出成功
+                GetNumber("ジェネ番号 PGUGM Fuel", fuelMatch.Groups[1].Value, out genNum); // ジェネ番号取得
+                fuelCnt = (++gameData.Generators[genNum - 1].FilledFuel);   // 投入済燃料数
+
+                osc.SendFuelNum(genNum, fuelCnt);                       // 必要燃料数送信
+            }
+            else
+            {                       // ジェネ状態更新抽出 失敗
+                return false;       // 抽出失敗
+            }
+
+            gameEvent.RaiseGameStateUpdated();                          // ゲーム情報更新イベント
+
+            return true;
+        }
+
+        /// <summary>
+        /// 数字取得
+        /// </summary>
+        /// <param name="itemName">名前</param>
+        /// <param name="number">数字</param>
+        private bool GetNumber(string itemName, string snumber, out int inumber)
+        {
+            bool result = false;    // 変換結果
+            result = int.TryParse(snumber, out inumber);    // 数値へ変換
+
+            if (result == false)
+            {                       // 変換失敗
+                ShowParseError(itemName, snumber);          // 変換エラー表示
+            }
+
+            return result;          // 変換結果
+        }
+
+        /// <summary>
+        /// 変換エラー表示
+        /// </summary>
+        /// <param name="itemName">名前</param>
+        /// <param name="value">内容</param>
+        private void ShowParseError(string itemName, string value, string title = "変換エラー")
+        {
+            MessageBox.Show($"{itemName}: {value}", title, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            // 変換エラー表示
+        }
+
     }
 }

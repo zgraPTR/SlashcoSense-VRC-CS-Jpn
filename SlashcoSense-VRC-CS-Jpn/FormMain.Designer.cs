@@ -30,7 +30,6 @@
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.labelSlasher = new System.Windows.Forms.Label();
-            this.labelMap = new System.Windows.Forms.Label();
             this.groupBoxG = new System.Windows.Forms.GroupBox();
             this.checkBoxG2Battery = new System.Windows.Forms.CheckBox();
             this.checkBoxG1Battery = new System.Windows.Forms.CheckBox();
@@ -40,7 +39,6 @@
             this.labelG2Fuel = new System.Windows.Forms.Label();
             this.labelG1Fuel = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
             this.groupBoxOSC = new System.Windows.Forms.GroupBox();
             this.numericUpDownPort = new System.Windows.Forms.NumericUpDown();
             this.checkBoxOSC = new System.Windows.Forms.CheckBox();
@@ -56,13 +54,11 @@
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.labelSlasher);
-            this.groupBox1.Controls.Add(this.labelMap);
             this.groupBox1.Controls.Add(this.groupBoxG);
             this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(10, 10);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(340, 190);
+            this.groupBox1.Size = new System.Drawing.Size(340, 160);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "ゲーム情報";
@@ -70,22 +66,12 @@
             // labelSlasher
             // 
             this.labelSlasher.AutoSize = true;
-            this.labelSlasher.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.labelSlasher.Location = new System.Drawing.Point(80, 50);
+            this.labelSlasher.Font = new System.Drawing.Font("Noto Serif JP", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.labelSlasher.Location = new System.Drawing.Point(80, 15);
             this.labelSlasher.Name = "labelSlasher";
-            this.labelSlasher.Size = new System.Drawing.Size(31, 12);
+            this.labelSlasher.Size = new System.Drawing.Size(32, 17);
             this.labelSlasher.TabIndex = 4;
             this.labelSlasher.Text = "不明";
-            // 
-            // labelMap
-            // 
-            this.labelMap.AutoSize = true;
-            this.labelMap.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.labelMap.Location = new System.Drawing.Point(80, 30);
-            this.labelMap.Name = "labelMap";
-            this.labelMap.Size = new System.Drawing.Size(31, 12);
-            this.labelMap.TabIndex = 3;
-            this.labelMap.Text = "不明";
             // 
             // groupBoxG
             // 
@@ -96,7 +82,7 @@
             this.groupBoxG.Controls.Add(this.progressBarG1Fuel);
             this.groupBoxG.Controls.Add(this.labelG2Fuel);
             this.groupBoxG.Controls.Add(this.labelG1Fuel);
-            this.groupBoxG.Location = new System.Drawing.Point(10, 80);
+            this.groupBoxG.Location = new System.Drawing.Point(10, 50);
             this.groupBoxG.Name = "groupBoxG";
             this.groupBoxG.Size = new System.Drawing.Size(320, 100);
             this.groupBoxG.TabIndex = 2;
@@ -106,7 +92,7 @@
             // checkBoxG2Battery
             // 
             this.checkBoxG2Battery.AutoSize = true;
-            this.checkBoxG2Battery.Location = new System.Drawing.Point(250, 60);
+            this.checkBoxG2Battery.Location = new System.Drawing.Point(240, 55);
             this.checkBoxG2Battery.Name = "checkBoxG2Battery";
             this.checkBoxG2Battery.Size = new System.Drawing.Size(67, 16);
             this.checkBoxG2Battery.TabIndex = 8;
@@ -116,7 +102,7 @@
             // checkBoxG1Battery
             // 
             this.checkBoxG1Battery.AutoSize = true;
-            this.checkBoxG1Battery.Location = new System.Drawing.Point(250, 30);
+            this.checkBoxG1Battery.Location = new System.Drawing.Point(240, 25);
             this.checkBoxG1Battery.Name = "checkBoxG1Battery";
             this.checkBoxG1Battery.Size = new System.Drawing.Size(67, 16);
             this.checkBoxG1Battery.TabIndex = 7;
@@ -170,27 +156,18 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(15, 50);
+            this.label2.Location = new System.Drawing.Point(15, 20);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(63, 12);
             this.label2.TabIndex = 1;
             this.label2.Text = "スラッシャー: ";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(15, 30);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(36, 12);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "マップ: ";
             // 
             // groupBoxOSC
             // 
             this.groupBoxOSC.Controls.Add(this.numericUpDownPort);
             this.groupBoxOSC.Controls.Add(this.checkBoxOSC);
             this.groupBoxOSC.Controls.Add(this.label5);
-            this.groupBoxOSC.Location = new System.Drawing.Point(12, 200);
+            this.groupBoxOSC.Location = new System.Drawing.Point(12, 170);
             this.groupBoxOSC.Name = "groupBoxOSC";
             this.groupBoxOSC.Size = new System.Drawing.Size(340, 50);
             this.groupBoxOSC.TabIndex = 2;
@@ -223,6 +200,8 @@
             // checkBoxOSC
             // 
             this.checkBoxOSC.AutoSize = true;
+            this.checkBoxOSC.Checked = true;
+            this.checkBoxOSC.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxOSC.Location = new System.Drawing.Point(10, 20);
             this.checkBoxOSC.Name = "checkBoxOSC";
             this.checkBoxOSC.Size = new System.Drawing.Size(83, 16);
@@ -251,7 +230,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(354, 261);
+            this.ClientSize = new System.Drawing.Size(364, 231);
             this.Controls.Add(this.groupBoxOSC);
             this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
@@ -276,7 +255,6 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBoxG;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label labelG1Fuel;
         private System.Windows.Forms.Label labelG2Fuel;
         private System.Windows.Forms.ProgressBar progressBarG2Fuel;
@@ -287,7 +265,6 @@
         private System.Windows.Forms.CheckBox checkBoxOSC;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label labelSlasher;
-        private System.Windows.Forms.Label labelMap;
         private System.Windows.Forms.CheckBox checkBoxG2Battery;
         private System.Windows.Forms.CheckBox checkBoxG1Battery;
         private System.IO.FileSystemWatcher fileSystemWatcherLog;

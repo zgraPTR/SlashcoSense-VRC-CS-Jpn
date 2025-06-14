@@ -6,7 +6,7 @@ namespace SlashcoSense_VRC_CS_Jpn
     {
         private static GameStateUpdateEvent _instance;     // インスタンス
 
-        public event EventHandler Changed;      // ゲーム情報発生イベント
+        public event EventHandler Changed;                  // ゲーム情報発生イベント
 
 
         // プロパティ
@@ -16,8 +16,8 @@ namespace SlashcoSense_VRC_CS_Jpn
             get
             {
                 if (_instance == null)
-                {
-                    _instance = new GameStateUpdateEvent();
+                {               // インスタンス未生成
+                    _instance = new GameStateUpdateEvent();         // インスタンス作成
                 }
                 return _instance;
             }
@@ -28,7 +28,7 @@ namespace SlashcoSense_VRC_CS_Jpn
         /// </summary>
         public void RaiseGameStateUpdated()
         {
-            Changed?.Invoke(this, new EventArgs());
+            Changed?.Invoke(this, new EventArgs());     // イベント発生
         }
     }
 }

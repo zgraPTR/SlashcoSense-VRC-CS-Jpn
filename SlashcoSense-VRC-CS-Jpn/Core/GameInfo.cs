@@ -5,7 +5,7 @@ namespace SlashcoSense_VRC_CS_Jpn
 {
     internal class GameInfo
     {
-        private static GameInfo _instance;     // インスタンス (シングルトン)
+        private static GameInfo _instance;              // インスタンス (シングルトン)
 
         // コンストラクター
         public GameInfo()
@@ -20,19 +20,18 @@ namespace SlashcoSense_VRC_CS_Jpn
             get
             {
                 if (_instance == null)
-                {
-                    _instance = new GameInfo();
+                {               // インスタンス未生成
+                    _instance = new GameInfo();     // インスタンス作成
                 }
                 return _instance;
             }
-        }                       // インスタンス (シングルトン)
+        }                       // インスタンス
 
         public bool InGame { get; set; }            // ゲーム中
-        public string MapName { get; set; }         // マップ名
 
         public string SlasherName { get; set; }     // スラッシャー名
 
-        public GeneratorInfo[] Generators { get; private set; }  // 燃料情報
+        public GeneratorInfo[] Generators { get; private set; }         // 燃料情報
 
         /// <summary>
         /// ゲーム情報に初期値代入
@@ -42,7 +41,6 @@ namespace SlashcoSense_VRC_CS_Jpn
             int genCnt = 0;                 // ループカウンタ
 
             InGame = false;                 // ゲーム外フラグ
-            MapName = string.Empty;         // マップ名
             SlasherName = string.Empty;     // スラッシャー名
 
             Generators = new GeneratorInfo[GameUtils.GenNum];       // ジェネレーター情報配列

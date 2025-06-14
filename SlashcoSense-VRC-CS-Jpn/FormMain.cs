@@ -36,6 +36,9 @@ namespace SlashcoSense_VRC_CS_Jpn
         private void FormMain_Load(object sender, EventArgs e)
         {
             OnGe(null, null);                           // 表示内容初期化
+
+            oscTransmitter.Port = (int)numericUpDownPort.Value;     // ポート取得
+            oscTransmitter.EnableOsc = checkBoxOSC.Checked;         // OSC有効化
         }
 
         /// <summary>
@@ -45,7 +48,6 @@ namespace SlashcoSense_VRC_CS_Jpn
         /// <param name="e"></param>
         public void OnGe(object sender, EventArgs e)
         {
-            labelMap.Text = gameData.MapName;               // マップ名
             labelSlasher.Text = gameData.SlasherName;       // スラッシャー名
 
             labelG1Fuel.Text = $"{fuelStr} {gameData.Generators[0].FilledFuel} / {GameUtils.TotalFuel}";    // 燃料
@@ -65,7 +67,7 @@ namespace SlashcoSense_VRC_CS_Jpn
         private void CheckBoxOSC_CheckedChanged(object sender, EventArgs e)
         {
             oscTransmitter.Port = (int)numericUpDownPort.Value;     // ポート取得
-            oscTransmitter.EnableOsc = checkBoxOSC.Checked;            // OSC有効化
+            oscTransmitter.EnableOsc = checkBoxOSC.Checked;         // OSC有効化
         }
 
         /// <summary>

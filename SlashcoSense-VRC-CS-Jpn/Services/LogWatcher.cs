@@ -8,7 +8,7 @@ namespace SlashcoSense_VRC_CS_Jpn
     internal class LogWatcher
     {
         private string logPath = string.Empty;  // 監視中のログファイルのパス
-        private long readPosition = 0;           // 最終読み取り位置
+        private long readPosition = 0;          // 最終読み取り位置
 
         private readonly LogParser logParser = new LogParser();   // スラシュコのログを管理するクラス
 
@@ -24,7 +24,7 @@ namespace SlashcoSense_VRC_CS_Jpn
             if (logPath != filePath)
             {                                   // ログファイルが変わった
                 logPath = filePath;             // ログファイルパス代入
-                readPosition = 0;                // 最終読み取り位置リセット
+                readPosition = 0;               // 最終読み取り位置リセット
             }
 
             ReadNewLines();                      // ログを読み込む
